@@ -69,7 +69,29 @@ trait Huffman extends HuffmanInterface:
    *       println("integer is  : "+ theInt)
    *   }
    */
-  def times(chars: List[Char]): List[(Char, Int)] = ???
+  def times(chars: List[Char]): List[(Char, Int)] = {
+    def timesacc(char:Char, acc: List[(Char,Int)]): List[(char,Int)] ={
+      if (acc.isEmpty){
+        acc :+ (char,1)
+      }
+      else acc.head match{
+        case(character,amount) =>
+          if(char == character){
+            (char,amount+1) :: acc.tail
+          }
+          else{
+            acc.head :: timesacc(char,acc.tail)
+          }
+
+      }
+    }
+    if(chars.isEmpty) {
+      List[(Char,Int)]()
+    }
+    else{
+      timesacc(chars.head,times(chars.tail))
+    }
+  }
 
   /**
    * Returns a list of `Leaf` nodes for a given frequency table `freqs`.

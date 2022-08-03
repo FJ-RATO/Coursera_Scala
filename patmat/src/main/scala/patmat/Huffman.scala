@@ -1,5 +1,4 @@
 package patmat
-
 /**
  * A huffman code is represented by a binary tree.
  *
@@ -70,7 +69,7 @@ trait Huffman extends HuffmanInterface:
    *   }
    */
   def times(chars: List[Char]): List[(Char, Int)] = {
-    def timesacc(char:Char, acc: List[(Char,Int)]): List[(char,Int)] ={
+    def timesacc(char:Char, acc: List[(Char,Int)]): List[(Char,Int)] ={
       if (acc.isEmpty){
         acc :+ (char,1)
       }
@@ -131,7 +130,13 @@ trait Huffman extends HuffmanInterface:
    * If `trees` is a list of less than two elements, that list should be returned
    * unchanged.
    */
-  def combine(trees: List[CodeTree]): List[CodeTree] = ???
+  def combine(trees: List[CodeTree]): List[CodeTree] = trees match {
+    case Nil => List[CodeTree]()
+    case x::Nil => trees
+    case x::xs =>
+     val combined = Fork(x,xs.head,chars(x):::chars(xs.head),weight(xs.head)+weight(x))
+     (combined :: xs.tail).sortWith((a,b) => weight(a) < weight(b))
+  }
 
   /**
    * This function will be called in the following way:

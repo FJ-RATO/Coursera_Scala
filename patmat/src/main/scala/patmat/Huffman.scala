@@ -210,7 +210,7 @@ trait Huffman extends HuffmanInterface:
   /**
    * Write a function that returns the decoded secret
    */
-  def decodedSecret: List[Char] = ???
+  def decodedSecret: List[Char] = decode(frenchCode,secret)
 
 
   // Part 4a: Encoding using Huffman tree
@@ -219,7 +219,20 @@ trait Huffman extends HuffmanInterface:
    * This function encodes `text` using the code tree `tree`
    * into a sequence of bits.
    */
-  def encode(tree: CodeTree)(text: List[Char]): List[Bit] = ???
+  def encode(tree: CodeTree)(text: List[Char]): List[Bit] = {
+    def encoder(sub_tree: CodeTree, text: List[Char]): List[Bit] = {
+      if(text.isEmpty) List[Bit]()
+      else sub_tree match {
+        case Leaf(_,_) => encoder(tree,text.tail)
+        case Fork(left,right,_,_) =>
+          if(chars(left).contains(text.head))
+            0 :: encoder(left,text)
+          else
+            1 :: encoder(right,text)
+      }
+    }
+    encoder(tree,text)
+  }
 
   // Part 4b: Encoding using code table
 

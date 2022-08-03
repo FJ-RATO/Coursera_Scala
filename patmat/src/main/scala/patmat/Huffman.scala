@@ -149,7 +149,13 @@ trait Huffman extends HuffmanInterface:
    * In such an invocation, `until` should call the two functions until the list of
    * code trees contains only one single tree, and then return that singleton list.
    */
-  def until(done: List[CodeTree] => Boolean, merge: List[CodeTree] => List[CodeTree])(trees: List[CodeTree]): List[CodeTree] = ???
+  def until(done: List[CodeTree] => Boolean, merge: List[CodeTree] => List[CodeTree])(trees: List[CodeTree]): List[CodeTree] = {
+    def func(trees: List[CodeTree]): List[CodeTree] = {
+      if done(trees) then trees
+      else func(merge(trees))
+    }
+    func(trees)
+  }
 
   /**
    * This function creates a code tree which is optimal to encode the text `chars`.

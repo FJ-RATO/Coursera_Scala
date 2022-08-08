@@ -97,7 +97,28 @@ object Anagrams extends AnagramsInterface:
    *  Note that the order of the occurrence list subsets does not matter -- the subsets
    *  in the example above could have been displayed in some other order.
    */
-  def combinations(occurrences: Occurrences): List[Occurrences] = ???
+  def combinations(occurrences: Occurrences): List[Occurrences] = {
+    occurrences :: (for(occ <- occurrences)yield combinations(unOccur(occurrences,occ._1))).flatten.distinct
+  }
+
+  /**
+  * Fetches the occurrence of a word if it exists and returns the list of words
+  * @param occ Occurrences
+  * @return List[Word] aka the list of words from that Occurrence
+  */
+
+  def occWords(occ:Occurrences):List[Word] = {
+    dictionaryByOccurrences.get(occ) match{
+      case Some(word) => word
+      case None => List()
+    }
+  }
+
+  def unOccur(occurrences: Occurrences,ch:Char): Occurrences = {
+    val occs = for((letter,count) <- occurrences) yield
+      if(letter == ch)(letter,count-1) else (letter,count)
+    occs.filter((occ) => occ._2 > 0)
+  }
 
   /** Subtracts occurrence list `y` from occurrence list `x`.
    *

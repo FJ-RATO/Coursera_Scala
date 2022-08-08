@@ -68,7 +68,12 @@ object Anagrams extends AnagramsInterface:
   }
 
   /** Returns all the anagrams of a given word. */
-  def wordAnagrams(word: Word): List[Word] = ???
+  def wordAnagrams(word: Word): List[Word] = { //thx ricardo for a simpler solution
+    val wordAnagrams = dictionaryByOccurrences.get(wordOccurrences(word))
+    wordAnagrams match
+      case Some(anagrams) => anagrams //from scala cheatsheet
+      case None => List[Word]()
+  }
 
   /** Returns the list of all subsets of the occurrence list.
    *  This includes the occurrence itself, i.e. `List(('k', 1), ('o', 1))`

@@ -174,7 +174,19 @@ object Anagrams extends AnagramsInterface:
    *
    *  Note: There is only one anagram of an empty sentence.
    */
-  def sentenceAnagrams(sentence: Sentence): List[Sentence] = ???
+  def sentenceAnagrams(sentence: Sentence): List[Sentence] = {
+    def anagramsAcc(occurrences: Occurrences): List[Sentence] = occurrences match{
+      case List() => List(List())
+      case _ => {
+        for{
+          combination <- combinations(occurrences) if (dictionaryByOccurrences.contains(combination))
+          word <- dictionaryByOccurrences(combination)
+          others <- anagramsAcc(subtract(occurrences,combination))
+        } yield word :: others
+      }
+    }
+    anagramsAcc(sentenceOccurrences(sentence))
+  }
 
 object Dictionary:
   def loadDictionary: List[String] =
